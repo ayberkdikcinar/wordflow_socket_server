@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "express": "^4.17.3",
+    "socket.io": "2.4.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "test",
+  "version": "1.0.0",
+  "main": "server.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

@@ -22,6 +22,7 @@ io.on('connection', (socket) => {
     socket.on('hintChange', handleHintChange);
     socket.on('load', handleInitialLoad);
     socket.on('disconnect', handleDisconnect);
+    socket.on('gameFinished', handleGameFinish);
 });
 
 //SOCKET HANDLER FUNCTIONS (this=socket)
@@ -53,10 +54,11 @@ function handlePlayerUnreadyEvent() {
     console.log(`Player ${this.id} has left the queue. Ready player count:` + readyPlayerCount);
 }
 
-function handleCardClickEvent(cardData) {
+function handleCardClickEvent(rounData) {
     let socketRoom = sids.get(this.id.toString());
-    io.to(socketRoom).emit('cardClicked', cardData);
-    console.log(`Card Clicked;\nCards Data: ${JSON.stringify(cardData.cardListStatus)}\n+Round: ${cardData.round.toString()}\n+CurrentHint: ${cardData.currentHint}\n+trueWordCount: ${cardData.trueWordCount}`);
+    io.to(socketRoom).emit('cardClicked', rounData);
+    console.log(`Card Clicked;\nCards Data: ${JSON.stringify(rounData.cardListStatus)}`);
+    console.log(`+Round: ${rounData.round.toString()}\n+CurrentHint: ${rounData.currentHint}\n+trueWordCount: ${rounData.trueWordCount}\n+score: ${JSON.stringify(rounData.playerScore)}`);
 }
 function handleEmitPlayingPlayerId(playerId) {
     let socketRoom = sids.get(this.id.toString());
@@ -82,4 +84,9 @@ function handleDisconnect(reason) {
     io.to(socketRoom).emit('playerDisconnected')
     this.leave(socketRoom);
     sids.delete(this.id.toString());
+}
+function handleGameFinish() {
+    let socketRoom = sids.get(this.id.toString());
+    io.to(socketRoom).emit('gameFinished')
+
 }
